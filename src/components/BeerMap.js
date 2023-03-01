@@ -7,7 +7,7 @@ class BeerMap extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      baseLocation: 'Des Moines',
+      baseLocation: '',
       yelpData: [],
       directions: []
     }
@@ -23,9 +23,8 @@ class BeerMap extends React.Component {
 
   handleYelpSearchSubmit = (event) => {
     event.preventDefault();
-    console.log('form submit');
-    this.getYelpData();
-    // search yelp with basevalue
+    this.setState({ yelpData: [], directions: [] })
+    this.state.baseLocation && this.getYelpData();
   }
 
   handleFormChange = (event) => {
@@ -35,7 +34,7 @@ class BeerMap extends React.Component {
   }
 
   componentDidMount() {
-    this.getYelpData();
+
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -51,7 +50,7 @@ class BeerMap extends React.Component {
   }
 
   render() {
-    console.log(this.state)
+    console.log(this.state.baseLocation)
     // yelp result
     const yelpList = typeof this.state.yelpData !== 'object' ? '' : this.state.yelpData.sort((a, b) => a.distance - b.distance).map(bar => (
       <li key={ bar.id }>
@@ -85,8 +84,6 @@ class BeerMap extends React.Component {
       </div>
     )), <h3>{ `Bar #${this.state.directions.length + 1}: ` + (this.state.yelpData.filter(yelpLocation => yelpLocation.address.join(', ') === this.state.directions[this.state.directions.length - 1]?.endName)[0]?.name ?? this.state.directions[this.state.directions.length - 1]?.endName) }</h3>];
 
-    // QR code
-
     return (
       <div id='contentContainer'>
         <div>
@@ -96,17 +93,16 @@ class BeerMap extends React.Component {
               <input type='submit' value='Find Bars' />
             </form>
 
-            { this.state.baseLocation &&
-              <div>
-                <ul id='yelpBars'>
-                  { yelpList }
-                </ul>
-              </div> }
+            <div>
+              <ul id='yelpBars'>
+                { this.state.baseLocation && yelpList }
+              </ul>
+            </div>
           </div>
         </div>
 
-        { this.state.baseLocation && <>
-          { typeof this.state.directions === 'object' ? <div id="routeContent">
+        { this.state.baseLocation && yelpList.length > 0 && typeof this.state.directions === 'object' ?
+          <div id="routeContent">
             <div>
               <img src={ map } alt='route map' />
             </div>
@@ -116,6 +112,7 @@ class BeerMap extends React.Component {
               <div id='directions'>{ mapDirections }</div>
             </div>
 
+            {/*
             <div id="social">
               <div>
                 <img src="https://qrtag.net/api/qr_transparent_6.svg?url=https://www.qrtag.net" alt="qrtag" />
@@ -126,9 +123,10 @@ class BeerMap extends React.Component {
                 <div>email</div>
               </div>
             </div>
+            */}
           </div>
-            :
-            <div>NO BAR RESULTS!!!</div> }</> }
+          :
+          <div>Please use the search bar to locate nearby bars.</div> }
       </div>
     )
   }
