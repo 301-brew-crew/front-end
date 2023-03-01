@@ -7,6 +7,8 @@ class BeerMap extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
+      loadingYelp: false,
+      loadingMap: false,
       baseLocation: '',
       yelpData: [],
       directions: []
@@ -14,11 +16,14 @@ class BeerMap extends React.Component {
   }
 
   getYelpData = () => {
-    // get yelp data
-    axios.get(`http://localhost:3001/yelp/${this.state.baseLocation} `).then(response => {
-      this.setState({ yelpData: response.data });
-    }
-    ).catch(error => console.error(error));
+    this.setState({
+      loadingYelp: true
+    });
+
+    axios.get(`http://localhost:3001/yelp/${this.state.baseLocation} `)
+      .then(response => { this.setState({ yelpData: response.data }) })
+      .catch(error => console.error(error))
+      .finally(this.setState({ loadingYelp: false }));
   }
 
   handleYelpSearchSubmit = (event) => {
@@ -33,26 +38,25 @@ class BeerMap extends React.Component {
     this.setState({ [event.target.name]: event.target.value })
   }
 
-  componentDidMount() {
-
-  }
-
   componentDidUpdate(prevProps, prevState) {
     if (prevState.yelpData === this.state.yelpData) return;
 
     // Build Waypoint Query for Direction Search.
     const directionQuery = typeof this.state.yelpData !== 'object' ? '' : this.state.yelpData.map((location, idx) => `wp.${idx + 1}=${location.address.join(', ')}`).join('&');
 
-    axios.get(`http://localhost:3001/bingDirections/${directionQuery} `).then(response =>
+    // set loading to true
+    console.log('loading map');
+    if (prevState.directions === this.state.directions) this.setState({ loadingMap: true });
 
-      this.setState(
-        { directions: response.data })).catch(error => console.error(error));
+    axios.get(`http://localhost:3001/bingDirections/${directionQuery} `).then(response => this.setState({ directions: response.data })).catch(error => console.error(error)).finally(() => {
+      console.log('done loading map');
+      this.setState({ loadingMap: false });
+    });
   }
 
   render() {
-    console.log(this.state.baseLocation)
     // yelp result
-    const yelpList = typeof this.state.yelpData !== 'object' ? '' : this.state.yelpData.sort((a, b) => a.distance - b.distance).map(bar => (
+    const yelpList = (typeof this.state.yelpData !== 'object' && !this.state.loadingYelp) ? '' : this.state.yelpData.sort((a, b) => a.distance - b.distance).map(bar => (
       <li key={ bar.id }>
         <div><img src={ bar.image || missingBarImg } alt={ bar.name } /></div>
         <div>
@@ -82,37 +86,56 @@ class BeerMap extends React.Component {
           )) }
         </ul>
       </div>
-    )), <h3>{ `Bar #${this.state.directions.length + 1}: ` + (this.state.yelpData.filter(yelpLocation => yelpLocation.address.join(', ') === this.state.directions[this.state.directions.length - 1]?.endName)[0]?.name ?? this.state.directions[this.state.directions.length - 1]?.endName) }</h3>];
+    )), <h3>{ `Bar #${this.state.directions.length + 1}: ` + (this.state.yelpData.filter(yelpLocation => yelpLocation.address.join(', ') === this.state.directions[this.state.directions.length - 1]?.endName)[0]?.name ?? this.state.directions[this.state.directions.length - 1]?.endName) }</h3>, <button>Save Route</button>];
 
     return (
       <div id='contentContainer'>
         <div>
           <div>
             <form onSubmit={ this.handleYelpSearchSubmit }>
-              <input type='search' name='baseLocation' value={ this.state.baseLocation } onChange={ this.handleFormChange } />
+              <input type='search' name='baseLocation' value={ this.state.baseLocation } onChange={ this.handleFormChange } placeholder='Type a location...' />
               <input type='submit' value='Find Bars' />
             </form>
 
             <div>
               <ul id='yelpBars'>
-                { this.state.baseLocation && yelpList }
+                { yelpList.length > 0 ? yelpList : 'some default list will go here...'}
               </ul>
             </div>
           </div>
         </div>
 
-        { this.state.baseLocation && yelpList.length > 0 && typeof this.state.directions === 'object' ?
-          <div id="routeContent">
-            <div>
-              <img src={ map } alt='route map' />
-            </div>
+        <div id="routeContent">
+          <div>
 
+            { (yelpList.length > 0 && typeof this.state.directions === 'object') ?
+              <img src={ map } alt='route map' /> :
+
+              <div id='noResults'>
+                { this.state.loadingMap ?
+                  <div>loading!!!</div> : yelpList.length === 0 ?
+                    <div>
+                      <h2>Use the searchbar to find nearby bars!!!</h2>
+                      <p>Beers? Beers? Beers? Beers? Beers? Beers?</p>
+                      <p>Beers? Beers? Beers? Beers? Beers? Beers?</p>
+                      <p>Beers? Beers? Beers? Beers? Beers? Beers?</p>
+                      <p>Beers? Beers? Beers? Beers? Beers? Beers?</p>
+                      <p>Beers? Beers? Beers? Beers? Beers? Beers?</p>
+                    </div> : '' }
+              </div>
+
+            }
+
+          </div>
+
+          { (this.state.directions.length !== 0 && !this.state.loadingMap) &&
             <div id="directions">
               <h2>{ totalDistance }</h2>
               <div id='directions'>{ mapDirections }</div>
             </div>
+          }
 
-            {/*
+          {/*
             <div id="social">
               <div>
                 <img src="https://qrtag.net/api/qr_transparent_6.svg?url=https://www.qrtag.net" alt="qrtag" />
@@ -124,9 +147,7 @@ class BeerMap extends React.Component {
               </div>
             </div>
             */}
-          </div>
-          :
-          <div>Please use the search bar to locate nearby bars.</div> }
+        </div>
       </div>
     )
   }
