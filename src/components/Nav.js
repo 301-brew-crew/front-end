@@ -9,8 +9,10 @@ class Nav extends React.Component {
         <header>
           <nav>
             <NavLink to="/">Home</NavLink>
+            <div>
             <NavLink to="about">About</NavLink>
             <NavLink to="profile">Profile</NavLink>
+            </div>
           </nav>
         </header>
 
