@@ -1,12 +1,18 @@
-*{
+* {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-body{
+p {
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+
+body {
   margin: 0 auto;
   max-width: 800px;
-}
-
-footer{
-  text-align: center;
+  border: 1px solid #000;
 }

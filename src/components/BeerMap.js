@@ -131,7 +131,7 @@ class BeerMap extends React.Component {
           { (this.state.directions.length !== 0 && !this.state.loadingMap) &&
             <div id="directions">
               <h2>{ totalDistance }</h2>
-              <div id='directions'>{ mapDirections }</div>
+              <div>{ mapDirections }</div>
             </div>
           }
 
