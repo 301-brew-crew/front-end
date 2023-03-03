@@ -1,14 +1,24 @@
+header {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 50;
+  background-color: rgb(52, 52, 52);
+}
+
 nav {
+  max-width: 800px;
+  margin: auto;
   color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(41, 41, 41);
 }
 
 nav a {
   color: inherit; /* blue colors for links too */
   text-decoration: inherit; /* no underline */
-  background-color: rgb(52, 52, 52);
+  background-color: rgb(0, 0, 0);
   padding: 5px;
 }

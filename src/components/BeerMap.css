@@ -3,16 +3,17 @@
   display: flex;
   flex-direction: column;
   max-width: 1000px;
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 #contentContainer img {
   width: 100%;
+  border-radius: 5px;
+  border: 1px solid #000;
 }
 
 #yelpBars {
   padding: 0;
-  margin: 5px 0px 0px 0px;
   border-radius: 5px;
 }
 
@@ -24,6 +25,8 @@
   flex-direction: row;
   align-items: center;
   cursor: pointer;
+
+  padding-right: 7px;
 
   margin-bottom: 5px;
   border-radius: 5px;
@@ -38,6 +41,13 @@
   margin: 5px;
   border: 1px solid #000;
 }
+
+#yelpBars li.default > div{
+  background-color: #a0a0a0;
+  color: #a0a0a0;
+  border: none;
+}
+
 
 #yelpBars li > div:nth-child(1) img {
   width: 120%;
@@ -61,13 +71,26 @@ form {
   width: 100%;
   position: -webkit-sticky;
   position: sticky;
-  top: 0;
+  top: 28px;
   z-index: 10;
+  padding: 5px 0;
+  background-color: rgb(185, 185, 185);
 }
 
 form > * {
   width: 100%;
   text-align: center;
+}
+
+form input,
+button {
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid #000;
+}
+
+form input:nth-child(1) {
+  margin-bottom: 5px;
 }
 
 #directions {
@@ -77,8 +100,8 @@ form > * {
   border-radius: 5px;
 }
 
-#directions h3 {
-  margin-bottom: 0;
+#directions h3, #directions button {
+  margin-top: 15px;
 }
 
 #directions h4 {
@@ -89,28 +112,6 @@ form > * {
   padding-inline-start: 40px;
 }
 
-#social {
-  display: flex;
-  flex-direction: column-reverse;
-}
-
-#social > div:nth-child(2) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#social > div:nth-child(2) > div {
-  flex: 1;
-  text-align: center;
-  border: 1px solid #000;
-  padding: 5px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 #routeContent > div:nth-child(1) {
   position: relative;
   width: 100%;
@@ -118,23 +119,11 @@ form > * {
 }
 
 #noResults {
-  background-color: #efefef;
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 0;
-  z-index: 20;
-}
-
-#noResults div {
-  background: white;
+  background-color: #fff;
+  height: 100%;
   border-radius: 5px;
   border: 1px solid #000;
   padding: 5px;
-  margin: 5px;
 }
 
 button,
@@ -148,6 +137,10 @@ input[type="submit"]:hover {
   cursor: pointer;
 }
 
+#yelpBars li.default {
+  display: none;
+}
+
 /* Desktop Version */
 @media screen and (min-width: 600px) {
   #contentContainer {
@@ -159,11 +152,6 @@ input[type="submit"]:hover {
     flex: 1;
   }
 
-  #contentContainer img {
-    border-radius: 5px;
-    border: 1px solid #000;
-  }
-
   #contentContainer > div:nth-child(1) {
     min-width: 250px;
   }
@@ -171,39 +159,18 @@ input[type="submit"]:hover {
   #contentContainer > div:nth-child(1) > div {
     position: -webkit-sticky;
     position: sticky;
-    top: 0;
+    top: 28px;
     z-index: 10;
   }
 
   #contentContainer > div:nth-child(2) {
     flex-basis: 400px;
-    margin-left: 5px;
-    max-width: 450px;
+    margin: 5px 0 0 5px;
+    max-width: 453px;
   }
 
-  #social {
-    padding: 5px;
-    flex-direction: row;
-  }
-
-  #social > div {
-    flex: 1;
-  }
-
-  #social > div:nth-child(2) {
-    min-width: 150px;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  #social > div:nth-child(2) > div {
-    border: 1px solid #000;
-    width: calc(100% - 10px);
-    margin-left: 5px;
-    text-align: center;
-  }
-
-  #social > div:nth-child(1) {
-    flex-basis: 300px;
+  #yelpBars li.default {
+    display: flex;
+    opacity: 0.3;
   }
 }

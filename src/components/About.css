@@ -1,0 +1,7 @@
+#aboutContainer div {
+  background: white;
+  border-radius: 5px;
+  border: 1px solid #000;
+  padding: 5px;
+  margin-bottom: 5px;
+}

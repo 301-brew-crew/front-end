@@ -10,9 +10,3 @@ p {
   margin-inline-start: 0px;
   margin-inline-end: 0px;
 }
-
-body {
-  margin: 0 auto;
-  max-width: 800px;
-  border: 1px solid #000;
-}
