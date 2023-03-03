@@ -3,6 +3,8 @@ import Nav from './components/Nav.js'
 import About from "./components/About.js";
 import BeerMap from './components/BeerMap.js'
 import Profile from './components/Profile.js'
+import Login from "./components/Login.js";
+import Logout from "./components/Logout.js";
 
 import './App.css';
 
@@ -18,7 +20,9 @@ const router = createBrowserRouter(
     <Route path="/" element={ <Nav /> }>
       <Route index element={ <BeerMap /> } />
       <Route path="about" element={ <About /> } />
-      <Route path="profile" element={ <Profile /> } />
+      <Route path='profile' element={<Profile />} /> 
+      <Route path="login" element={<Login />} />
+      <Route path="logout" element={<Logout />} /> 
     </Route>
   )
 );

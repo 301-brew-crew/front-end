@@ -1,6 +1,6 @@
 import React from "react";
-import { NavLink, Outlet } from 'react-router-dom';
-import './Nav.css';
+import { NavLink, Outlet } from "react-router-dom";
+import "./Nav.css";
 import { withAuth0 } from "@auth0/auth0-react";
 
 class Nav extends React.Component {
@@ -11,11 +11,19 @@ class Nav extends React.Component {
           <nav>
             <NavLink to="/">Home</NavLink>
             <div>
-            <NavLink to="about">About</NavLink>
-            <NavLink to="profile">Profile</NavLink>
+              <NavLink to="about">About</NavLink>
+              {this.props.auth0.isAuthenticated ? (
+                <>
+                  <NavLink to="logout">Logout</NavLink>
+                  <NavLink to="profile">Profile</NavLink>
+                </>
+              ) : (
+                <NavLink to="login">Login</NavLink>
+              )}
             </div>
           </nav>
         </header>
+
 
         <main>
           <Outlet />
