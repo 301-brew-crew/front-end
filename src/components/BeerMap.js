@@ -56,17 +56,27 @@ class BeerMap extends React.Component {
 
   render() {
     // yelp result
-    const yelpList = (typeof this.state.yelpData !== 'object' && !this.state.loadingYelp) ? '' : this.state.yelpData.sort((a, b) => a.distance - b.distance).map(bar => (
-      <li key={ bar.id }>
-        <div><img src={ bar.image || missingBarImg } alt={ bar.name } /></div>
-        <div>
-          <div>{ bar.name }</div>
-          <div>{ bar.address[0] }</div>
-          <div>{ bar.phone }</div>
-          <div><a href={ bar.review } target="_blank" rel="noreferrer">Yelp Review</a></div>
-        </div>
-      </li>
-    ));
+    const yelpList = (this.state.yelpData.length < 1) ? new Array(10).fill(<li className='default'>
+      <div></div>
+      <div>
+        <div>Default Bar</div>
+        <div>123 S South Blvd</div>
+        <div>(515) 965-2556</div>
+        <div>Yelp Review</div>
+      </div>
+    </li>)
+      :
+      this.state.yelpData.sort((a, b) => a.distance - b.distance).map(bar => (
+        <li key={ bar.id }>
+          <div><img src={ bar.image || missingBarImg } alt={ bar.name } /></div>
+          <div>
+            <div>{ bar.name }</div>
+            <div>{ bar.address[0] }</div>
+            <div>{ bar.phone }</div>
+            <div><a href={ bar.review } target="_blank" rel="noreferrer">Yelp Review</a></div>
+          </div>
+        </li>
+      ));
 
     // query for map image
     const mapRouteQuery = typeof this.state.directions !== 'object' ? '' : `wp.1=${this.state.directions[0]?.startCoordinates};66;1&` + this.state.directions.map((location, idx) => `wp.${idx + 2}=${location.endCoordinates};66;${idx + 2}`).join('&');
@@ -99,54 +109,32 @@ class BeerMap extends React.Component {
 
             <div>
               <ul id='yelpBars'>
-                { yelpList.length > 0 ? yelpList : 'some default list will go here...'}
+                { yelpList }
               </ul>
             </div>
           </div>
         </div>
 
         <div id="routeContent">
-          <div>
-
-            { (yelpList.length > 0 && typeof this.state.directions === 'object') ?
-              <img src={ map } alt='route map' /> :
-
-              <div id='noResults'>
-                { this.state.loadingMap ?
-                  <div>loading!!!</div> : yelpList.length === 0 ?
-                    <div>
-                      <h2>Use the searchbar to find nearby bars!!!</h2>
-                      <p>Beers? Beers? Beers? Beers? Beers? Beers?</p>
-                      <p>Beers? Beers? Beers? Beers? Beers? Beers?</p>
-                      <p>Beers? Beers? Beers? Beers? Beers? Beers?</p>
-                      <p>Beers? Beers? Beers? Beers? Beers? Beers?</p>
-                      <p>Beers? Beers? Beers? Beers? Beers? Beers?</p>
-                    </div> : '' }
+          { this.state.directions.length !== 0 && typeof this.state.directions === 'object' && !this.state.loadingMap && !this.state.loadingYelp?
+            <>
+              <div>
+                <img src={ map } alt='route map' />
               </div>
+              <div id="directions">
+                <h2>{ totalDistance }</h2>
+                <div>{ mapDirections }</div>
+              </div>
+            </> :
+            <div id='noResults'>
+              <h2>Beer Route Site</h2>
+              Welcome to our site.  Find beer, then go home!  I am a very sad little boy.  Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos harum non doloremque minima veniam aperiam ipsam voluptas nemo alias placeat suscipit provident, tempora vitae nesciunt dolorem doloribus dignissimos molestias eum quibusdam minus nihil aliquam?
 
-            }
-
-          </div>
-
-          { (this.state.directions.length !== 0 && !this.state.loadingMap) &&
-            <div id="directions">
-              <h2>{ totalDistance }</h2>
-              <div id='directions'>{ mapDirections }</div>
+              <h2>How to use:</h2>
+              Welcome to our site.  Find beer, then go home!  I am a very sad little boy.  Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos harum non doloremque minima veniam aperiam ipsam voluptas nemo alias placeat suscipit provident, tempora vitae nesciunt dolorem doloribus dignissimos molestias eum quibusdam minus nihil aliquam?
             </div>
+            
           }
-
-          {/*
-            <div id="social">
-              <div>
-                <img src="https://qrtag.net/api/qr_transparent_6.svg?url=https://www.qrtag.net" alt="qrtag" />
-              </div>
-              <div>
-                <div>facebook</div>
-                <div>twitter</div>
-                <div>email</div>
-              </div>
-            </div>
-            */}
         </div>
       </div>
     )
