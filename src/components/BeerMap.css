@@ -207,7 +207,6 @@ div#noResults.loading div {
 
 div#noResults.loading span {
   position: relative;
-  bottom: 45px;
   font-size: 20px;
   font-weight: bold;
   animation: 1s infinite move-backwards;
