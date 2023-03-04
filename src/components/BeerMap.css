@@ -25,11 +25,34 @@
   flex-direction: row;
   align-items: center;
   cursor: pointer;
-
-  padding-right: 7px;
+  padding: 0;
 
   margin-bottom: 5px;
   border-radius: 5px;
+
+  position: relative;
+}
+
+#yelpBars li a {
+  color: inherit; /* blue colors for links too */
+  text-decoration: inherit; /* no underline */
+  border: 1px solid #000;
+  padding: 1px;
+  margin-top: 1px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+#yelpBars li a:hover {
+  background-color: #d1d1d1;
+}
+
+#yelpBars li:hover {
+  background-color: #ededed;
+}
+
+#yelpBars li:active {
+  background-color: #e0e0e0;
 }
 
 #yelpBars li > div:nth-child(1) {
@@ -42,13 +65,6 @@
   border: 1px solid #000;
 }
 
-#yelpBars li.default > div{
-  background-color: #a0a0a0;
-  color: #a0a0a0;
-  border: none;
-}
-
-
 #yelpBars li > div:nth-child(1) img {
   width: 120%;
   height: auto;
@@ -56,15 +72,30 @@
 
 #yelpBars li:hover > div:nth-child(1) img {
   transform: scale(110%);
-  transition: all 0.3s ease-in-out;
+  transition: all 0.2s;
+}
+
+#yelpBars li:active > div:nth-child(1) img {
+  transform: scale(104%);
 }
 
 #yelpBars li > div:nth-child(2) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1;
   text-align: center;
+  flex: 1;
+  position: relative;
+  right: 25px;
+}
+
+#yelpBars li > div:nth-last-of-type(1) {
+  position: absolute;
+  top: 5px;
+  right: 0px;
+  font-size: 57px;
+  transform: rotate(27deg);
+  background-color: initial;
 }
 
 form {
@@ -100,7 +131,8 @@ form input:nth-child(1) {
   border-radius: 5px;
 }
 
-#directions h3, #directions button {
+#directions h3,
+#directions button {
   margin-top: 15px;
 }
 
@@ -126,6 +158,10 @@ form input:nth-child(1) {
   padding: 5px;
 }
 
+#noResults ol {
+  padding-inline-start: 40px;
+}
+
 button,
 input[type="submit"] {
   width: 100%;
@@ -135,10 +171,66 @@ input[type="submit"] {
 button:hover,
 input[type="submit"]:hover {
   cursor: pointer;
+  background-color: #dbdbdb;
 }
 
 #yelpBars li.default {
   display: none;
+}
+
+#noResults {
+  min-height: calc(100vh - 150px);
+}
+
+div#noResults.loading div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 40vh;
+}
+
+.loader {
+  animation: 1s infinite spin;
+  font-size: 200px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+div#noResults.loading span {
+  position: relative;
+  bottom: 45px;
+  font-size: 20px;
+  font-weight: bold;
+  animation: 1s infinite move-backwards;
+}
+
+@keyframes move-backwards {
+  0% {
+    opacity: 0;
+    right: -60px;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    right: 30px;
+  }
 }
 
 /* Desktop Version */
@@ -153,7 +245,7 @@ input[type="submit"]:hover {
   }
 
   #contentContainer > div:nth-child(1) {
-    min-width: 250px;
+    min-width: 280px;
   }
 
   #contentContainer > div:nth-child(1) > div {
@@ -171,6 +263,50 @@ input[type="submit"]:hover {
 
   #yelpBars li.default {
     display: flex;
-    opacity: 0.3;
+    opacity: 0.5;
+    cursor: initial;
+    padding-right: 8px;
+  }
+
+  #yelpBars li.default > div {
+    background-color: #a0a0a0;
+    color: #a0a0a0;
+    border: none;
+
+    position: initial;
+  }
+
+  #yelpBars li.default.noSelect > div:nth-child(2) {
+    position: relative;
+    right: 21px;
+    background-color: initial;
+  }
+
+  #yelpBars li.default.noSelect:hover {
+    cursor: pointer;
+  }
+
+  #yelpBars li.default.noSelect div {
+    background-color: inherit;
+    color: inherit;
+  }
+
+  #yelpBars li.default.noSelect > div:nth-last-of-type(1) {
+    transform: rotate(158deg);
+    background-color: initial;
+    font-size: 47px;
+    position: absolute;
+    top: -1px;
+    right: 2px;
+  }
+
+  #yelpBars li.default.noSelect img,
+  #yelpBars li.default.noSelect:hover img {
+    transform: rotate(180deg);
+    filter: grayscale(1);
+  }
+
+  #noResults {
+    min-height: 100%;
   }
 }
