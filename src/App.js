@@ -1,29 +1,39 @@
 import React from "react";
-import axios from "axios";
+import Nav from './components/Nav.js'
+import About from "./components/About.js";
+import BeerMap from './components/BeerMap.js'
+import Profile from './components/Profile.js'
+import Login from "./components/Login.js";
+import Logout from "./components/Logout.js";
+
 import './App.css';
-let SERVER = process.env.REACT_APP_SERVER;
+
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={ <Nav /> }>
+      <Route index element={ <BeerMap /> } />
+      <Route path="about" element={ <About /> } />
+      <Route path='profile' element={<Profile />} /> 
+      <Route path="login" element={<Login />} />
+      <Route path="logout" element={<Logout />} /> 
+    </Route>
+  )
+);
 
 class App extends React.Component {
-  render(){
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-    }
+  render() {
+    return <>
+      <RouterProvider router={ router } />
+      <footer> &copy; copyright {new Date().getFullYear()}</footer>
+    </>
+  }
 }
 
 export default App;
