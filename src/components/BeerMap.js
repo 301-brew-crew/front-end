@@ -32,6 +32,21 @@ class BeerMap extends React.Component {
     this.setState({ [event.target.name]: event.target.value })
   }
 
+  handleRouteSave = (event) => {
+    console.log(event);
+
+    axios.post('http://localhost:3001/dbResults', {
+        yelpData: this.state.directions,
+        directions: this.state.directions
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   handleBarChange = (event) => {
 
     // can bar be selected to be removed? We need 2 to make a route.
@@ -119,10 +134,10 @@ class BeerMap extends React.Component {
         <ul>
           { routeLeg.itineraryItems.map((step, idx) => (
             <li key={ step.instruction.text.replace(' ', '-') + idx + step.travelDistance }>{ `${step.instruction.text} (${Math.round(step.travelDistance * 10) / 10} miles)` }</li>
-          )) }
+          ))}
         </ul>
       </div>
-    )), <h3 key={ this.state.directions.length + 1 }> <ImLocation/>{ ` #${this.state.directions.length + 1}: ` + (this.state.yelpData.filter(yelpLocation => yelpLocation.address.join(', ') === this.state.directions[this.state.directions.length - 1]?.endName)[0]?.name ?? this.state.directions[this.state.directions.length - 1]?.endName) }</h3>, <button>Save Route</button>];
+    )), <h3 key={ this.state.directions.length + 1 }> <ImLocation/>{ ` #${this.state.directions.length + 1}: ` + (this.state.yelpData.filter(yelpLocation => yelpLocation.address.join(', ') === this.state.directions[this.state.directions.length - 1]?.endName)[0]?.name ?? this.state.directions[this.state.directions.length - 1]?.endName) }</h3>, <button onClick={this.handleRouteSave}>Save Route</button>];
 
     return (
       <div id='contentContainer'>
