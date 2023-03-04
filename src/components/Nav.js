@@ -12,14 +12,15 @@ class Nav extends React.Component {
             <NavLink to="/">Home</NavLink>
             <div>
               <NavLink to="about">About</NavLink>
-              {this.props.auth0.isAuthenticated ? (
+              { this.props.auth0.isAuthenticated ? (
                 <>
-                  <NavLink to="logout">Logout</NavLink>
+                  <NavLink to="saved-bars">Saved Bars</NavLink>
                   <NavLink to="profile">Profile</NavLink>
+                  <NavLink to="logout">Logout</NavLink>
                 </>
               ) : (
                 <NavLink to="login">Login</NavLink>
-              )}
+              ) }
             </div>
           </nav>
         </header>

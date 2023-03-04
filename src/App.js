@@ -3,6 +3,7 @@ import Nav from './components/Nav.js'
 import About from "./components/About.js";
 import BeerMap from './components/BeerMap.js'
 import Profile from './components/Profile.js'
+import SavedBars from './components/SavedBars.js'
 import Login from "./components/Login.js";
 import Logout from "./components/Logout.js";
 
@@ -20,6 +21,7 @@ const router = createBrowserRouter(
     <Route path="/" element={ <Nav /> }>
       <Route index element={ <BeerMap /> } />
       <Route path="about" element={ <About /> } />
+      <Route path="saved-bars" element={ <SavedBars /> } />
       <Route path='profile' element={<Profile />} /> 
       <Route path="login" element={<Login />} />
       <Route path="logout" element={<Logout />} /> 
