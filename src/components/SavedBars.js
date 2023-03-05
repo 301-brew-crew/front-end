@@ -8,14 +8,22 @@ class SavedBars extends React.Component {
     this.state = { savedRoutes: [] }
   }
 
-
   getBars = () => {
-    axios.get('https://brew-crew-backend.onrender.com/dbResults').then(res => {
-      console.log(res.data);
-      this.setState({ savedRoutes: res.data });
-    });
+    axios.get('https://brew-crew-backend.onrender.com/dbResults')
+      .then(res => {
+        console.log(res.data);
+        this.setState({ savedRoutes: res.data });
+      })
+      .catch(error => console.error(error));
   }
 
+  handleDeleteBars = (id) => {
+    axios.delete(`http://localhost:3001/dbResults/${id}`)
+      .then(res => {
+        this.getBars();
+      })
+      .catch(error => console.error(error));
+  }
 
   componentDidMount() {
     this.getBars();
@@ -23,9 +31,11 @@ class SavedBars extends React.Component {
 
   render() {
     const list = this.state.savedRoutes.map(route => (
-      <li key={ route._id }>{route._id}</li>
+      <li key={ route._id }>
+        { route._id }
+        <button onClick={ () => { this.handleDeleteBars(route._id) } }> Delete </button>
+      </li>
     ));
-
 
     return (
       <ul>
