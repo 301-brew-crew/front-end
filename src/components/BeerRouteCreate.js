@@ -2,13 +2,14 @@ import React from 'react';
 import axios from 'axios';
 import { withAuth0 } from "@auth0/auth0-react";
 import { NavLink } from "react-router-dom";
+import RouteDirections from "./RouteDirections.js";
+import RouteMap from "./RouteMap.js";
 import missingBarImg from '../images/missing-bar.jpg';
 import demoGif from '../images/demo.gif';
 import { GiCartwheel, GiBeerBottle, GiBrokenBottle } from 'react-icons/gi';
-import { ImLocation } from 'react-icons/im';
-import './BeerMap.css';
+import './BeerRouteCreate.css';
 
-class BeerMap extends React.Component {
+class BeerRouteCreate extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -119,45 +120,6 @@ class BeerMap extends React.Component {
           <div>{ bar.selected ? <GiBrokenBottle /> : <GiBeerBottle /> }</div>
         </li>
       ));
-
-    // Build search query for map image
-    const mapRouteQuery = typeof this.state.directions !== 'object' ? '' : `wp.1=${this.state.directions[0]?.startCoordinates};66;1&` + this.state.directions.map((location, idx) => `wp.${idx + 2}=${location.endCoordinates};66;${idx + 2}`).join('&');
-
-    // Fetch map image.
-    const map = `https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes/Walking?${mapRouteQuery}&travelMode=Walking&optmz=distance&mapSize=400,400&key=${process.env.REACT_APP_BING}`;
-
-    // Calculate total distance.
-    const totalDistance = typeof this.state.directions !== 'object' ? '' : `TOTAL: ${Math.round(this.state.directions.reduce((preValue, curValue) => preValue + curValue.travelDistance, 0) * 10) / 10} miles`;
-
-    // Build list of directions.
-    const mapDirections = typeof this.state.directions !== 'object' ? '' : [...this.state.directions.map((routeLeg, idx) => (
-      <div key={ routeLeg?.endCoordinates + idx }>
-        <h3 key={ idx + 1 }> <ImLocation />{ ` #${idx + 1}: ` + (this.state.yelpData?.filter(yelpLocation => yelpLocation?.address.join(', ') === routeLeg.startName)[0]?.name ?? routeLeg?.startName) }</h3>
-        <h4>{ `(Next bar is ${Math.round(routeLeg.travelDistance * 10) / 10} miles away)` }</h4>
-        <ul>
-          { routeLeg.itineraryItems.map((step, idx) => (
-            <li key={ step.instruction.text.replace(' ', '-') + idx + step.travelDistance }>{ `${step.instruction.text} (${Math.round(step.travelDistance * 10) / 10} miles)` }</li>
-          )) }
-        </ul>
-      </div>
-    )),
-    <h3 key={ this.state.directions.length + 1 }>
-      <ImLocation />
-      { ` #${this.state.directions.length + 1}: ` + (this.state.yelpData.filter(yelpLocation => yelpLocation.address.join(', ') === this.state.directions[this.state.directions.length - 1]?.endName)[0]?.name ?? this.state.directions[this.state.directions.length - 1]?.endName) }
-    </h3>,
-    <>
-      {
-        this.props.auth0.isAuthenticated ?
-          <button key={ this.state.directions.length + 1 } onClick={ this.handleRouteSave }>
-            Save Route
-          </button>
-          :
-          <button key={ this.state.directions.length + 1 }><NavLink to="/login">You must log in to save a route!</NavLink>
-          </button>
-      }
-    </>
-    ];
-
     return (
       <div id='contentContainer'>
         <div>
@@ -178,12 +140,19 @@ class BeerMap extends React.Component {
         <div id="routeContent">
           { this.state.directions.length !== 0 && typeof this.state.directions === 'object' ?
             <>
-              <div>
-                <img src={ map } alt='route map' />
-              </div>
+              <RouteMap directions={ this.state.directions } yelpData={ this.state.yelpData } />
+
               <div id="directions">
-                <h2>{ totalDistance }</h2>
-                <div>{ mapDirections }</div>
+                <RouteDirections directions={ this.state.directions } yelpData={ this.state.yelpData } />
+                {
+                  this.props.auth0.isAuthenticated ?
+                    <button key={ this.state.directions.length + 1 } onClick={ this.handleRouteSave }>
+                      Save Route
+                    </button>
+                    :
+                    <button key={ this.state.directions.length + 1 }><NavLink to="/login">You must log in to save a route!</NavLink>
+                    </button>
+                }
               </div>
             </> :
             <div id='noResults' className={ this.state.welcomeMessage ? '' : 'loading' }>
@@ -222,4 +191,4 @@ class BeerMap extends React.Component {
   }
 }
 
-export default withAuth0(BeerMap);
+export default withAuth0(BeerRouteCreate);
