@@ -1,5 +1,6 @@
 #savedBarsContainer {
   display: flex;
+  flex-direction: column;
   background-color: #e3e3e3;
   padding: 5px;
   border-radius: 5px;
@@ -10,11 +11,11 @@
   flex: 1;
 }
 
-#savedBarsContainer ul {
+#savedBarsContainer #savedResultsList ul {
   list-style: none;
 }
 
-#savedBarsContainer li {
+#savedBarsContainer #savedResultsList li {
   display: flex;
   margin-bottom: 5px;
   padding: 5px;
@@ -33,4 +34,12 @@
 
 #savedBarsContainer li div button:nth-child(1) {
   margin-bottom: 5px;
+}
+
+/* Desktop Version */
+@media screen and (min-width: 600px) {
+  #savedBarsContainer {
+    flex-direction: row;
+    max-width: 800px;
+  }
 }

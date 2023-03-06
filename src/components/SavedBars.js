@@ -1,4 +1,6 @@
 import React from "react";
+import RouteMap from "./RouteMap.js";
+import RouteDirections from "./RouteDirections.js";
 import './SavedBars.css';
 import axios from 'axios';
 
@@ -48,7 +50,7 @@ class SavedBars extends React.Component {
         </div>
         <div>
           <button onClick={ () => this.handleSelectedRouteClick(route._id) }> View Route </button>
-          
+
           <button onClick={ () => this.handleDeleteBars(route._id) }> Delete </button>
         </div>
       </li>
@@ -61,14 +63,19 @@ class SavedBars extends React.Component {
         <h2>Saved Bars</h2>
         <div id='savedBarsContainer'>
 
-          <div>
+          <div id='savedResultsList'>
             <ul>
               { list }
             </ul>
           </div>
 
           <div>
-            { this.state.selectedRoute?._id ?? 'Click a route.'}
+            { !this.state.selectedRoute?._id ? 'Click a route.' :
+              <>
+                <RouteMap directions={ this.state.selectedRoute.directions } />
+                <RouteDirections directions={ this.state?.selectedRoute?.directions } yelpData={ this.state?.selectedRoute?.yelpData } />
+              </>
+            }
           </div>
         </div>
       </>
