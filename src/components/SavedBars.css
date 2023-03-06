@@ -1,0 +1,36 @@
+#savedBarsContainer {
+  display: flex;
+  background-color: #e3e3e3;
+  padding: 5px;
+  border-radius: 5px;
+  height: 100%;
+}
+
+#savedBarsContainer > div {
+  flex: 1;
+}
+
+#savedBarsContainer ul {
+  list-style: none;
+}
+
+#savedBarsContainer li {
+  display: flex;
+  margin-bottom: 5px;
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+
+#savedBarsContainer li:last-of-type {
+  margin-bottom: 0px;
+}
+
+#savedBarsContainer li div {
+  flex: 1;
+}
+
+#savedBarsContainer li div button:nth-child(1) {
+  margin-bottom: 5px;
+}

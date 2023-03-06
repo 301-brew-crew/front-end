@@ -1,8 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import missingBarImg from '../images/missing-bar.jpg'
+import { withAuth0 } from "@auth0/auth0-react";
+import { NavLink } from "react-router-dom";
+import missingBarImg from '../images/missing-bar.jpg';
+import demoGif from '../images/demo.gif';
 import { GiCartwheel, GiBeerBottle, GiBrokenBottle } from 'react-icons/gi';
-import {ImLocation} from 'react-icons/im';
+import { ImLocation } from 'react-icons/im';
 import './BeerMap.css';
 
 class BeerMap extends React.Component {
@@ -36,9 +39,9 @@ class BeerMap extends React.Component {
     console.log(event);
 
     axios.post('http://localhost:3001/dbResults', {
-        yelpData: this.state.directions,
-        directions: this.state.directions
-      })
+      yelpData: this.state.directions,
+      directions: this.state.directions
+    })
       .then(function (response) {
         console.log(response);
       })
@@ -53,19 +56,19 @@ class BeerMap extends React.Component {
     const canSelect = this.state.directions.length > 1;
 
     const barsToUpdate = this.state.yelpData.map(bar => {
-      
+
       // find matching bar by id of clicked item
-      if(bar.id === event.currentTarget.dataset.value){
+      if (bar.id === event.currentTarget.dataset.value) {
         // only select if there are no less than 2 directions
-        if(canSelect && bar.selected === false){
+        if (canSelect && bar.selected === false) {
           bar.selected = true;
         } else {
           bar.selected = false;
-        }    
+        }
       }
       return bar;
     });
-      
+
     this.setState({ yelpData: barsToUpdate });
   }
 
@@ -81,7 +84,7 @@ class BeerMap extends React.Component {
     const directionQuery = !this.state.yelpData.length ? '' : this.state.yelpData.filter(yelpBar => !yelpBar.selected).map((location, idx) => `wp.${idx}=${location.address.join(', ')}`).join('&');
 
     // If query is empty, exit.  There is no need to call API
-    if(!directionQuery) return;
+    if (!directionQuery) return;
 
     // Replace welcome message with loader
     if (prevState.directions === this.state.directions) this.setState({ welcomeMessage: false });
@@ -101,7 +104,7 @@ class BeerMap extends React.Component {
         <div>-</div>
         <div>-</div>
       </div>
-        <div></div>
+      <div></div>
     </li>))
       :
       this.state.yelpData.sort((a, b) => a.distance - b.distance).map(bar => (
@@ -113,7 +116,7 @@ class BeerMap extends React.Component {
             <div>{ bar.phone }</div>
             <div><a href={ bar.review } target="_blank" rel="noreferrer">Yelp Review</a></div>
           </div>
-          <div>{bar.selected ? <GiBrokenBottle /> : <GiBeerBottle/>}</div>
+          <div>{ bar.selected ? <GiBrokenBottle /> : <GiBeerBottle /> }</div>
         </li>
       ));
 
@@ -129,15 +132,31 @@ class BeerMap extends React.Component {
     // Build list of directions.
     const mapDirections = typeof this.state.directions !== 'object' ? '' : [...this.state.directions.map((routeLeg, idx) => (
       <div key={ routeLeg?.endCoordinates + idx }>
-        <h3 key={ idx + 1 }> <ImLocation/>{ ` #${idx + 1}: ` + (this.state.yelpData?.filter(yelpLocation => yelpLocation?.address.join(', ') === routeLeg.startName)[0]?.name ?? routeLeg?.startName) }</h3>
+        <h3 key={ idx + 1 }> <ImLocation />{ ` #${idx + 1}: ` + (this.state.yelpData?.filter(yelpLocation => yelpLocation?.address.join(', ') === routeLeg.startName)[0]?.name ?? routeLeg?.startName) }</h3>
         <h4>{ `(Next bar is ${Math.round(routeLeg.travelDistance * 10) / 10} miles away)` }</h4>
         <ul>
           { routeLeg.itineraryItems.map((step, idx) => (
             <li key={ step.instruction.text.replace(' ', '-') + idx + step.travelDistance }>{ `${step.instruction.text} (${Math.round(step.travelDistance * 10) / 10} miles)` }</li>
-          ))}
+          )) }
         </ul>
       </div>
-    )), <h3 key={ this.state.directions.length + 1 }> <ImLocation/>{ ` #${this.state.directions.length + 1}: ` + (this.state.yelpData.filter(yelpLocation => yelpLocation.address.join(', ') === this.state.directions[this.state.directions.length - 1]?.endName)[0]?.name ?? this.state.directions[this.state.directions.length - 1]?.endName) }</h3>, <button onClick={this.handleRouteSave}>Save Route</button>];
+    )),
+    <h3 key={ this.state.directions.length + 1 }>
+      <ImLocation />
+      { ` #${this.state.directions.length + 1}: ` + (this.state.yelpData.filter(yelpLocation => yelpLocation.address.join(', ') === this.state.directions[this.state.directions.length - 1]?.endName)[0]?.name ?? this.state.directions[this.state.directions.length - 1]?.endName) }
+    </h3>,
+    <>
+      {
+        this.props.auth0.isAuthenticated ?
+          <button key={ this.state.directions.length + 1 } onClick={ this.handleRouteSave }>
+            Save Route
+          </button>
+          :
+          <button key={ this.state.directions.length + 1 }><NavLink to="/login">You must log in to save a route!</NavLink>
+          </button>
+      }
+    </>
+    ];
 
     return (
       <div id='contentContainer'>
@@ -171,15 +190,21 @@ class BeerMap extends React.Component {
               { this.state.welcomeMessage ? <div id='homeMessage'>
                 <h1>Beer Route Site</h1>
                 <p>
-                Welcome to our site.  This site was created to help create the most efficient biking (or walking) route between selected bars.
+                  Welcome to our site.  This site was created to help create the most efficient biking (or walking) route between selected bars.
                 </p>
 
                 <h2>How to use:</h2>
-                  <ol>
-                    <li>Click the bars you want to remove or add.</li>
-                    <li>In order to receive directions you must select at least 2 bars.</li>
-                    <li>Click 'Save Route'.</li>
-                  </ol>
+                <ol>
+                  <li>Type your location in the searchbar.</li>
+                  <li>Click the bars you want to remove or add (there must be at least 2 bars selected).</li>
+                  <li>
+                    { !this.props.auth0.isAuthenticated ?
+                      <><NavLink to="/login">Log in</NavLink> if you want to save your route.</> : <>View your <NavLink to="/saved-bars">saved bars</NavLink>.</>
+                    }
+                  </li>
+                </ol>
+
+                <img id='demoImg' src={ demoGif } alt='demo' />
 
               </div> :
                 <div>
@@ -197,4 +222,4 @@ class BeerMap extends React.Component {
   }
 }
 
-export default BeerMap;
+export default withAuth0(BeerMap);

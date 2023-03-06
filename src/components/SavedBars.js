@@ -5,13 +5,15 @@ import axios from 'axios';
 class SavedBars extends React.Component {
   constructor (props) {
     super(props);
-    this.state = { savedRoutes: [] }
+    this.state = {
+      savedRoutes: [],
+      selectedRoute: {}
+    }
   }
 
   getBars = () => {
-    axios.get('https://brew-crew-backend.onrender.com/dbResults')
+    axios.get('http://localhost:3001/dbResults')
       .then(res => {
-        console.log(res.data);
         this.setState({ savedRoutes: res.data });
       })
       .catch(error => console.error(error));
@@ -25,22 +27,51 @@ class SavedBars extends React.Component {
       .catch(error => console.error(error));
   }
 
+  handleSelectedRouteClick = (id) => {
+    const selectedRoute = this.state.savedRoutes.filter(savedRoute => savedRoute._id === id)[0];
+
+    this.setState({ selectedRoute: selectedRoute });
+  }
+
   componentDidMount() {
     this.getBars();
   }
 
   render() {
+    console.log(this.state.savedRoutes);
+    console.log(this.state.selectedRoute);
+
     const list = this.state.savedRoutes.map(route => (
       <li key={ route._id }>
-        { route._id }
-        <button onClick={ () => { this.handleDeleteBars(route._id) } }> Delete </button>
+        <div>
+          <div>{ `${route.directions[0].startName} to ${route.directions[route.directions.length - 1].endName}` }</div>
+        </div>
+        <div>
+          <button onClick={ () => this.handleSelectedRouteClick(route._id) }> View Route </button>
+          
+          <button onClick={ () => this.handleDeleteBars(route._id) }> Delete </button>
+        </div>
       </li>
     ));
 
+
+
     return (
-      <ul>
-        { list }
-      </ul>
+      <>
+        <h2>Saved Bars</h2>
+        <div id='savedBarsContainer'>
+
+          <div>
+            <ul>
+              { list }
+            </ul>
+          </div>
+
+          <div>
+            { this.state.selectedRoute?._id ?? 'Click a route.'}
+          </div>
+        </div>
+      </>
     );
   }
 }

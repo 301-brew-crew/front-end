@@ -60,14 +60,17 @@
   height: 80px;
   overflow: hidden;
   display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   margin: 5px;
   border: 1px solid #000;
 }
 
 #yelpBars li > div:nth-child(1) img {
-  width: 120%;
+  width: 140%;
   height: auto;
+  border: none;
 }
 
 #yelpBars li:hover > div:nth-child(1) img {
@@ -168,6 +171,15 @@ input[type="submit"] {
   display: block;
 }
 
+button a {
+  color: inherit; /* blue colors for links too */
+  text-decoration: inherit; /* no underline */
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 2;
+  width: 100%;
+}
+
 button:hover,
 input[type="submit"]:hover {
   cursor: pointer;
@@ -183,11 +195,26 @@ input[type="submit"]:hover {
 }
 
 div#noResults.loading div {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 28px;
+
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   height: 40vh;
+}
+
+#contentContainer img#demoImg {
+  border-radius: initial;
+  margin-top: 5px;
+}
+
+#homeMessage {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 28px;
 }
 
 .loader {
