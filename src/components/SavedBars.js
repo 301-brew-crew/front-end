@@ -10,8 +10,7 @@ class SavedBars extends React.Component {
     super(props);
     this.state = {
       savedRoutes: [],
-      selectedRoute: {},
-      email: ''
+      selectedRoute: {}
     }
   }
 
@@ -22,7 +21,7 @@ class SavedBars extends React.Component {
 
       this.props.auth0.getIdTokenClaims().then(res => {
         const jwt = res.__raw;
-        this.setState({ email: res.email })
+        //this.setState({ email: res.email })
         console.log("token: ", jwt);
 
         const headers = {
@@ -81,7 +80,7 @@ class SavedBars extends React.Component {
   }
 
   render() {
-    console.log(this.state.email);
+    console.log(this.state);
     const list = this.state.savedRoutes.map(route => (
       <li key={ route._id }>
         <div>

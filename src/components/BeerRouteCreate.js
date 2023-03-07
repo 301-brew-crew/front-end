@@ -46,9 +46,7 @@ class BeerRouteCreate extends React.Component {
 
       this.props.auth0.getIdTokenClaims().then(res => {
         const jwt = res.__raw;
-        console.log(res.email);
-
-
+  
         console.log("token: ", jwt);
 
         const headers = {
@@ -69,11 +67,6 @@ class BeerRouteCreate extends React.Component {
           .catch(function (error) {
             console.log(error);
           });
-
-
-
-
-
 
       });   
     }
