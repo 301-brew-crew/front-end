@@ -54,6 +54,9 @@ class BeerRouteCreate extends React.Component {
         }
 
 
+
+
+
         axios.post('http://localhost:3001/dbResults', {
           yelpData: this.state.directions,
           directions: this.state.directions
@@ -66,8 +69,19 @@ class BeerRouteCreate extends React.Component {
           .catch(function (error) {
             console.log(error);
           });
-      });
+
+
+
+
+
+
+      });   
     }
+
+
+
+
+    
   }
 
   handleBarChange = (event) => {

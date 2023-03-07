@@ -1,6 +1,7 @@
 import React from "react";
 import RouteMap from "./RouteMap.js";
 import RouteDirections from "./RouteDirections.js";
+import { withAuth0 } from "@auth0/auth0-react";
 import './SavedBars.css';
 import axios from 'axios';
 
@@ -14,19 +15,57 @@ class SavedBars extends React.Component {
   }
 
   getBars = () => {
-    axios.get('http://localhost:3001/dbResults')
-      .then(res => {
-        this.setState({ savedRoutes: res.data });
-      })
-      .catch(error => console.error(error));
+
+    // Token
+    if (this.props.auth0.isAuthenticated) {
+
+      this.props.auth0.getIdTokenClaims().then(res => {
+        const jwt = res.__raw;
+        console.log("token: ", jwt);
+
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwt}`
+        }
+
+        axios.get('http://localhost:3001/dbResults', {}, {
+          headers: headers
+        })
+          .then(res => {
+            this.setState({ savedRoutes: res.data });
+          })
+          .catch(error => console.error(error));
+      });
+    }
   }
 
+
+
+
+
   handleDeleteBars = (id) => {
-    axios.delete(`http://localhost:3001/dbResults/${id}`)
-      .then(res => {
-        this.getBars();
-      })
-      .catch(error => console.error(error));
+
+    // Token
+    if (this.props.auth0.isAuthenticated) {
+
+      this.props.auth0.getIdTokenClaims().then(res => {
+        const jwt = res.__raw;
+        console.log("token: ", jwt);
+
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwt}`
+        }
+
+        axios.delete(`http://localhost:3001/dbResults/${id}`, {}, {
+          headers: headers
+        })
+          .then(res => {
+            this.getBars();
+          })
+          .catch(error => console.error(error));
+      });
+    }
   }
 
   handleSelectedRouteClick = (id) => {
@@ -40,9 +79,6 @@ class SavedBars extends React.Component {
   }
 
   render() {
-    console.log(this.state.savedRoutes);
-    console.log(this.state.selectedRoute);
-
     const list = this.state.savedRoutes.map(route => (
       <li key={ route._id }>
         <div>
@@ -83,4 +119,4 @@ class SavedBars extends React.Component {
   }
 }
 
-export default SavedBars;
+export default withAuth0(SavedBars);
