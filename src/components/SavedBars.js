@@ -114,7 +114,7 @@ class SavedBars extends React.Component {
             </ul>
           </div>
           <div id='savedResultsDirections'>
-            { !this.state.selectedRoute?._id ?
+            { !this.state.selectedRoute?._id || !this.state.savedRoutes.length ?
               <>
                 <Profile />
                 You are currently logged in.  Please click a route to view the directions.
