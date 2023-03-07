@@ -36,8 +36,20 @@ class BeerRouteCreate extends React.Component {
     this.setState({ [event.target.name]: event.target.value })
   }
 
+
+
+
   handleRouteSave = (event) => {
-    console.log(event);
+
+    // Token
+    if (this.props.auth0.isAuthenticated) {
+
+      this.props.auth0.getIdTokenClaims().then(res => {
+        const jwt = res.__raw;
+        console.log("token: ", jwt);
+      });
+    }
+
 
     axios.post('http://localhost:3001/dbResults', {
       yelpData: this.state.directions,
