@@ -46,6 +46,9 @@ class BeerRouteCreate extends React.Component {
 
       this.props.auth0.getIdTokenClaims().then(res => {
         const jwt = res.__raw;
+        console.log(res.email);
+
+
         console.log("token: ", jwt);
 
         const headers = {
@@ -53,13 +56,10 @@ class BeerRouteCreate extends React.Component {
           'Authorization': `Bearer ${jwt}`
         }
 
-
-
-
-
         axios.post('http://localhost:3001/dbResults', {
           yelpData: this.state.directions,
-          directions: this.state.directions
+          directions: this.state.directions,
+          email: res.email
         }, {
           headers: headers
         })
@@ -81,7 +81,7 @@ class BeerRouteCreate extends React.Component {
 
 
 
-    
+
   }
 
   handleBarChange = (event) => {
