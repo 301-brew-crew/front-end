@@ -3,6 +3,8 @@ import RouteMap from "./RouteMap.js";
 import RouteDirections from "./RouteDirections.js";
 import Profile from "./Profile.js";
 import { withAuth0 } from "@auth0/auth0-react";
+import { GrRefresh } from 'react-icons/gr';
+import { BsFillTrashFill, BsEyeFill } from 'react-icons/bs';
 import './SavedBars.css';
 import axios from 'axios';
 
@@ -36,6 +38,12 @@ class SavedBars extends React.Component {
     }
   }
 
+  refreshRoutes = (id) => {
+    const selectedRoute = this.state.savedRoutes.filter(savedRoute => savedRoute._id === id)[0];
+
+    this.setState({ selectedRoute: selectedRoute });
+  }
+
   handleDeleteBars = (id) => {
     // Token
     if (this.props.auth0.isAuthenticated) {
@@ -53,6 +61,13 @@ class SavedBars extends React.Component {
         })
           .then(res => {
             this.getBars();
+
+            // if deleted bar id === selectedRoute id
+            if (id === this.state.selectedRoute._id) {
+              // set selected route to first saved route.
+              const newId = this.state.savedRoutes[0]._id
+              this.refreshRoutes(newId);
+            }
           })
           .catch(error => console.error(error));
       });
@@ -60,9 +75,7 @@ class SavedBars extends React.Component {
   }
 
   handleSelectedRouteClick = (id) => {
-    const selectedRoute = this.state.savedRoutes.filter(savedRoute => savedRoute._id === id)[0];
-
-    this.setState({ selectedRoute: selectedRoute });
+    this.refreshRoutes(id);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -83,9 +96,9 @@ class SavedBars extends React.Component {
           <div>{ `${route.directions[0].startName} to ${route.directions[route.directions.length - 1].endName}` }</div>
         </div>
         <div>
-          <button onClick={ () => this.handleSelectedRouteClick(route._id) }> View Route </button>
+          <button onClick={ () => this.handleSelectedRouteClick(route._id) }><BsEyeFill /> View Route </button>
 
-          <button onClick={ () => this.handleDeleteBars(route._id) }> Delete </button>
+          <button onClick={ () => this.handleDeleteBars(route._id) }><BsFillTrashFill /> Delete </button>
         </div>
       </li>
     ));
@@ -97,7 +110,7 @@ class SavedBars extends React.Component {
 
           <div id='savedResultsList'>
             <ul>
-              { list.length ? list : <li id="refreshRouteList" onClick={ this.getBars }>Click to refresh list of saved routes.</li> }
+              { list.length ? list : <li id="refreshRouteList" onClick={ this.getBars }><GrRefresh /> Click to refresh list of saved routes.</li> }
             </ul>
           </div>
           <div id='savedResultsDirections'>
