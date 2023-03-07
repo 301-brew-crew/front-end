@@ -15,21 +15,16 @@ class SavedBars extends React.Component {
   }
 
   getBars = () => {
-
     // Token
     if (this.props.auth0.isAuthenticated) {
-
       this.props.auth0.getIdTokenClaims().then(res => {
         const jwt = res.__raw;
-        //this.setState({ email: res.email })
-        console.log("token: ", jwt);
-
         const headers = {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${jwt}`
         }
 
-        axios.get('http://localhost:3001/dbResults', {}, {
+        axios.get(`http://localhost:3001/dbResults?email=${res.email}`, {
           headers: headers
         })
           .then(res => {
@@ -40,15 +35,9 @@ class SavedBars extends React.Component {
     }
   }
 
-
-
-
-
   handleDeleteBars = (id) => {
-
     // Token
     if (this.props.auth0.isAuthenticated) {
-
       this.props.auth0.getIdTokenClaims().then(res => {
         const jwt = res.__raw;
         console.log("token: ", jwt);
@@ -75,12 +64,19 @@ class SavedBars extends React.Component {
     this.setState({ selectedRoute: selectedRoute });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState === this.state) return;
+    this.getBars();
+
+    if (prevState.selectedRoute.directions === this.state.selectedRoute.directions) return;
+    console.log('up')
+  }
+
   componentDidMount() {
     this.getBars();
   }
 
   render() {
-    console.log(this.state);
     const list = this.state.savedRoutes.map(route => (
       <li key={ route._id }>
         <div>
@@ -94,8 +90,6 @@ class SavedBars extends React.Component {
       </li>
     ));
 
-
-
     return (
       <>
         <h2>Saved Bars</h2>
@@ -108,12 +102,14 @@ class SavedBars extends React.Component {
           </div>
 
           <div>
+
             { !this.state.selectedRoute?._id ? 'Click a route.' :
               <>
                 <RouteMap directions={ this.state.selectedRoute.directions } />
                 <RouteDirections directions={ this.state?.selectedRoute?.directions } yelpData={ this.state?.selectedRoute?.yelpData } />
               </>
             }
+
           </div>
         </div>
       </>
