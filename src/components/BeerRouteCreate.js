@@ -1,11 +1,13 @@
 import React from 'react';
 import axios from 'axios';
-import { withAuth0 } from "@auth0/auth0-react";
-import { NavLink } from "react-router-dom";
 import LoginButton from './Login.js';
-import { GiCartwheel, GiBeerBottle, GiBrokenBottle } from 'react-icons/gi';
 import RouteDirections from "./RouteDirections.js";
 import RouteMap from "./RouteMap.js";
+import { withAuth0 } from "@auth0/auth0-react";
+import { NavLink } from "react-router-dom";
+import { GiCartwheel, GiBeerBottle, GiBrokenBottle } from 'react-icons/gi';
+import { IoMdBeer } from 'react-icons/io';
+import { FaRegSave } from 'react-icons/fa';
 import missingBarImg from '../images/missing-bar.jpg';
 import demoGif from '../images/demo.gif';
 import './BeerRouteCreate.css';
@@ -37,18 +39,12 @@ class BeerRouteCreate extends React.Component {
     this.setState({ [event.target.name]: event.target.value })
   }
 
-
-
-
   handleRouteSave = (event) => {
-
     // Token
     if (this.props.auth0.isAuthenticated) {
 
       this.props.auth0.getIdTokenClaims().then(res => {
         const jwt = res.__raw;
-  
-        console.log("token: ", jwt);
 
         const headers = {
           'Content-Type': 'application/json',
@@ -69,13 +65,8 @@ class BeerRouteCreate extends React.Component {
             console.log(error);
           });
 
-      });   
+      });
     }
-
-
-
-
-
   }
 
   handleBarChange = (event) => {
@@ -153,7 +144,7 @@ class BeerRouteCreate extends React.Component {
           <div>
             <form onSubmit={ this.handleYelpSearchSubmit }>
               <input type='search' name='baseLocation' value={ this.state.baseLocation } onChange={ this.handleFormChange } placeholder='Type a location...' />
-              <input type='submit' value='Find Bars' />
+              <input type='submit' value='&#128269; Search for bars' />
             </form>
 
             <div>
@@ -173,17 +164,17 @@ class BeerRouteCreate extends React.Component {
                 <RouteDirections directions={ this.state.directions } yelpData={ this.state.yelpData } />
                 {
                   this.props.auth0.isAuthenticated ?
-                    <button key={ this.state.directions.length + 1 } onClick={ this.handleRouteSave }>
+                    <button key={ this.state.directions.length + 1 } onClick={ this.handleRouteSave }><FaRegSave /> 
                       Save Route
                     </button>
                     :
-                    <LoginButton value='Log in to save route' />           
+                    <LoginButton value='Log in to save route' />
                 }
               </div>
             </> :
             <div id='noResults' className={ this.state.welcomeMessage ? '' : 'loading' }>
               { this.state.welcomeMessage ? <div id='homeMessage'>
-                <h1>Beer Route Site</h1>
+                <h1>< IoMdBeer />Brew Crew</h1>
                 <p>
                   Welcome to our site.  This site was created to help create the most efficient biking (or walking) route between selected bars.
                 </p>
@@ -194,7 +185,7 @@ class BeerRouteCreate extends React.Component {
                   <li>Click the bars you want to remove or add (there must be at least 2 bars selected).</li>
                   <li>
                     { !this.props.auth0.isAuthenticated ?
-                      <><LoginButton value='Log in'/> if you want to save your route.</> : <>View your <NavLink to="/saved-bars">saved bars</NavLink>.</>
+                      <><LoginButton value='Log in' /> if you want to save your route.</> : <>View your <NavLink to="/saved-bars">saved bars</NavLink>.</>
                     }
                   </li>
                 </ol>

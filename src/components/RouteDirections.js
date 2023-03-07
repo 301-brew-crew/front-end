@@ -1,12 +1,13 @@
 import React from "react";
 import './RouteDirections.css';
 import { ImLocation } from 'react-icons/im';
+import { FaMapMarkedAlt } from 'react-icons/fa';
 
 class RouteDirections extends React.Component {
 
   render() {
     // Calculate total distance.
-    const totalDistance = typeof this.props.directions !== 'object' ? '' : `TOTAL: ${Math.round(this.props.directions.reduce((preValue, curValue) => preValue + curValue.travelDistance, 0) * 10) / 10} miles`;
+    const totalDistance = typeof this.props.directions !== 'object' ? '' : <><FaMapMarkedAlt/> {`${Math.round(this.props.directions.reduce((preValue, curValue) => preValue + curValue.travelDistance, 0) * 10) / 10} miles total`}</>;
 
     // Build list of directions.
     const mapDirections = typeof this.props.directions !== 'object' ? '' : [...this.props.directions.map((routeLeg, idx) => (

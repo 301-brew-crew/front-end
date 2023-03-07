@@ -33,7 +33,7 @@ class App extends React.Component {
   render() {
     return <>
       <RouterProvider router={ router } />
-      <footer> &copy; copyright {new Date().getFullYear()}</footer>
+      <footer> &copy; copyright {new Date().getFullYear()} Brew Crew</footer>
     </>
   }
 }
