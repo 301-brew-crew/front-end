@@ -47,20 +47,27 @@ class BeerRouteCreate extends React.Component {
       this.props.auth0.getIdTokenClaims().then(res => {
         const jwt = res.__raw;
         console.log("token: ", jwt);
+
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwt}`
+        }
+
+
+        axios.post('http://localhost:3001/dbResults', {
+          yelpData: this.state.directions,
+          directions: this.state.directions
+        }, {
+          headers: headers
+        })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       });
     }
-
-
-    axios.post('http://localhost:3001/dbResults', {
-      yelpData: this.state.directions,
-      directions: this.state.directions
-    })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
   }
 
   handleBarChange = (event) => {
