@@ -217,6 +217,12 @@ div#noResults.loading div {
   top: 28px;
 }
 
+#homeMessage button {
+  width: auto;
+  display: inline-block;
+  padding: 5px 8px;
+}
+
 .loader {
   animation: 1s infinite spin;
   font-size: 200px;

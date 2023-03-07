@@ -2,11 +2,12 @@ import React from 'react';
 import axios from 'axios';
 import { withAuth0 } from "@auth0/auth0-react";
 import { NavLink } from "react-router-dom";
+import LoginButton from './Login.js';
+import { GiCartwheel, GiBeerBottle, GiBrokenBottle } from 'react-icons/gi';
 import RouteDirections from "./RouteDirections.js";
 import RouteMap from "./RouteMap.js";
 import missingBarImg from '../images/missing-bar.jpg';
 import demoGif from '../images/demo.gif';
-import { GiCartwheel, GiBeerBottle, GiBrokenBottle } from 'react-icons/gi';
 import './BeerRouteCreate.css';
 
 class BeerRouteCreate extends React.Component {
@@ -176,8 +177,7 @@ class BeerRouteCreate extends React.Component {
                       Save Route
                     </button>
                     :
-                    <button key={ this.state.directions.length + 1 }><NavLink to="/login">You must log in to save a route!</NavLink>
-                    </button>
+                    <LoginButton value='Log in to save route' />           
                 }
               </div>
             </> :
@@ -194,7 +194,7 @@ class BeerRouteCreate extends React.Component {
                   <li>Click the bars you want to remove or add (there must be at least 2 bars selected).</li>
                   <li>
                     { !this.props.auth0.isAuthenticated ?
-                      <><NavLink to="/login">Log in</NavLink> if you want to save your route.</> : <>View your <NavLink to="/saved-bars">saved bars</NavLink>.</>
+                      <><LoginButton value='Log in'/> if you want to save your route.</> : <>View your <NavLink to="/saved-bars">saved bars</NavLink>.</>
                     }
                   </li>
                 </ol>
