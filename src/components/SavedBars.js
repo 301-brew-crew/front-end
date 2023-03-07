@@ -1,6 +1,7 @@
 import React from "react";
 import RouteMap from "./RouteMap.js";
 import RouteDirections from "./RouteDirections.js";
+import Profile from "./Profile.js";
 import { withAuth0 } from "@auth0/auth0-react";
 import './SavedBars.css';
 import axios from 'axios';
@@ -69,7 +70,6 @@ class SavedBars extends React.Component {
     this.getBars();
 
     if (prevState.selectedRoute.directions === this.state.selectedRoute.directions) return;
-    console.log('up')
   }
 
   componentDidMount() {
@@ -97,19 +97,21 @@ class SavedBars extends React.Component {
 
           <div id='savedResultsList'>
             <ul>
-              { list }
+              { list.length ? list : <li id="refreshRouteList" onClick={ this.getBars }>Click to refresh list of saved routes.</li> }
             </ul>
           </div>
-
-          <div>
-
-            { !this.state.selectedRoute?._id ? 'Click a route.' :
+          <div id='savedResultsDirections'>
+            { !this.state.selectedRoute?._id ?
+              <>
+                <Profile />
+                You are currently logged in.  Please click a route to view the directions.
+              </>
+              :
               <>
                 <RouteMap directions={ this.state.selectedRoute.directions } />
                 <RouteDirections directions={ this.state?.selectedRoute?.directions } yelpData={ this.state?.selectedRoute?.yelpData } />
               </>
             }
-
           </div>
         </div>
       </>

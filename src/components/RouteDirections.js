@@ -5,7 +5,6 @@ import { ImLocation } from 'react-icons/im';
 class RouteDirections extends React.Component {
 
   render() {
-    console.log(this.props)
     // Calculate total distance.
     const totalDistance = typeof this.props.directions !== 'object' ? '' : `TOTAL: ${Math.round(this.props.directions.reduce((preValue, curValue) => preValue + curValue.travelDistance, 0) * 10) / 10} miles`;
 
