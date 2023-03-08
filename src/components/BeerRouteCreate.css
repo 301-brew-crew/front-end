@@ -20,7 +20,7 @@
 #yelpBars li {
   list-style: none;
   border: 1px solid #000;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -44,15 +44,15 @@
 }
 
 #yelpBars li a:hover {
-  background-color: #d1d1d1;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 #yelpBars li:hover {
-  background-color: #ededed;
+  background-color: rgba(255, 255, 255, 0.75);
 }
 
 #yelpBars li:active {
-  background-color: #e0e0e0;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 #yelpBars li > div:nth-child(1) {
@@ -60,14 +60,17 @@
   height: 80px;
   overflow: hidden;
   display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   margin: 5px;
   border: 1px solid #000;
 }
 
 #yelpBars li > div:nth-child(1) img {
-  width: 120%;
+  width: 140%;
   height: auto;
+  border: none;
 }
 
 #yelpBars li:hover > div:nth-child(1) img {
@@ -168,6 +171,30 @@ input[type="submit"] {
   display: block;
 }
 
+button.submit {
+  animation: 1s 1 success;
+}
+
+@keyframes success {
+  0% {
+    background-color: initial;
+  }
+
+  100% {
+    background-color: rgb(83, 150, 83);
+    color: #fff;
+  }
+}
+
+button a {
+  color: inherit; /* blue colors for links too */
+  text-decoration: inherit; /* no underline */
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 2;
+  width: 100%;
+}
+
 button:hover,
 input[type="submit"]:hover {
   cursor: pointer;
@@ -183,11 +210,32 @@ input[type="submit"]:hover {
 }
 
 div#noResults.loading div {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 28px;
+
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   height: 40vh;
+}
+
+#contentContainer img#demoImg {
+  border-radius: initial;
+  margin-top: 5px;
+}
+
+#homeMessage {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 28px;
+}
+
+#homeMessage button {
+  width: auto;
+  display: inline-block;
+  padding: 5px 8px;
 }
 
 .loader {
@@ -295,7 +343,7 @@ div#noResults.loading span {
     background-color: initial;
     font-size: 47px;
     position: absolute;
-    top: -1px;
+    top: 3px;
     right: 2px;
   }
 

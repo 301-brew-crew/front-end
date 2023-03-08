@@ -6,7 +6,7 @@ class About extends React.Component {
     return (
       <>
         <h2>
-          about
+          About
         </h2>
         <div id='aboutContainer'>
           <div>

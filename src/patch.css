@@ -1,0 +1,69 @@
+:root {
+  --red-crayola: #ef2d56;
+  --pumpkin: #ed7d3a;
+  --pistachio: #8cd867;
+  --emerald: #2fbf71;
+  --jet: #363537;
+}
+
+/* patch for 3-8-23 */
+
+html,
+body {
+  background-color: #31283a;
+}
+
+main,
+form {
+  background-color: var(--emerald);
+}
+
+#savedBarsContainer {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* nav, header, footer */
+nav,
+header,
+footer {
+  background-color: #21162e;
+}
+
+nav a,
+nav button {
+  background-color: #110024;
+}
+
+nav a:hover,
+nav button:hover {
+  background-color: rgb(41, 0, 101);
+}
+
+nav a:active,
+nav button:active {
+  background-color: rgb(43, 0, 108);
+}
+
+/* call to action buttons */
+button,
+input[type="submit"] {
+  background-color: var(--pumpkin);
+}
+
+button:hover,
+input[type="submit"]:hover {
+  background-color: #ee6c21;
+}
+
+button:active,
+input[type="submit"]:active {
+  background-color: #ca500a;
+}
+
+button.delete {
+  background-color: var(--red-crayola);
+}
+
+.barButtonResultContainer button:first-of-type, #directions button, #directions button.success {
+  background-color: var(--pistachio);
+}

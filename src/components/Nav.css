@@ -16,9 +16,26 @@ nav {
   background-color: rgb(41, 41, 41);
 }
 
-nav a {
+nav div {
+  display: flex;
+}
+
+nav a,
+nav button {
   color: inherit; /* blue colors for links too */
   text-decoration: inherit; /* no underline */
   background-color: rgb(0, 0, 0);
   padding: 5px;
+  border-radius: 0px;
+  font-family: initial;
+  font-size: initial;
+  display: inline-block;
+  border: none;
+  width: auto;
+  height: initial;
+}
+
+nav a:hover,
+nav button:hover {
+  background-color: rgb(21, 21, 21);
 }
