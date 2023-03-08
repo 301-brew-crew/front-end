@@ -8,6 +8,8 @@ import Login from "./components/Login.js";
 import Logout from "./components/Logout.js";
 
 import './App.css';
+// patch css for 3-8-23
+import './patch.css'
 
 import {
   createBrowserRouter,
@@ -22,9 +24,9 @@ const router = createBrowserRouter(
       <Route index element={ <BeerRouteCreate /> } />
       <Route path="about" element={ <About /> } />
       <Route path="saved-bars" element={ <SavedBars /> } />
-      <Route path='profile' element={<Profile />} /> 
-      <Route path="login" element={<Login />} />
-      <Route path="logout" element={<Logout />} /> 
+      <Route path='profile' element={ <Profile /> } />
+      <Route path="login" element={ <Login /> } />
+      <Route path="logout" element={ <Logout /> } />
     </Route>
   )
 );
@@ -33,7 +35,7 @@ class App extends React.Component {
   render() {
     return <>
       <RouterProvider router={ router } />
-      <footer> &copy; copyright {new Date().getFullYear()} Brew Crew</footer>
+      <footer> &copy; copyright { new Date().getFullYear() } Brew Cruise</footer>
     </>
   }
 }

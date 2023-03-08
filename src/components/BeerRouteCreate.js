@@ -18,6 +18,7 @@ class BeerRouteCreate extends React.Component {
     this.state = {
       submit: false,
       welcomeMessage: true,
+      noDirections: false,
       baseLocation: '',
       yelpData: [],
       directions: []
@@ -25,14 +26,14 @@ class BeerRouteCreate extends React.Component {
   }
 
   getYelpData = () => {
-    axios.get(`https://brew-crew-backend.onrender.com/yelp/${this.state.baseLocation} `)
+    axios.get(`http://localhost:3001/yelp/${this.state.baseLocation} `)
       .then(response => { this.setState({ yelpData: response.data }) })
       .catch(error => console.error(error));
   }
 
   handleYelpSearchSubmit = (event) => {
     event.preventDefault();
-    this.setState({ yelpData: [], directions: [] });
+    this.setState({ yelpData: [], directions: [], submit: false });
     this.state.baseLocation && this.getYelpData();
   }
 
@@ -41,7 +42,7 @@ class BeerRouteCreate extends React.Component {
   }
 
   handleRouteSave = (event) => {
-
+    this.setState({ submit: false });
     // Token
     if (this.props.auth0.isAuthenticated) {
 
@@ -53,8 +54,8 @@ class BeerRouteCreate extends React.Component {
           'Authorization': `Bearer ${jwt}`
         }
 
-        axios.post('https://brew-crew-backend.onrender.com/dbResults', {
-          yelpData: this.state.directions,
+        axios.post('http://localhost:3001/dbResults', {
+          yelpData: this.state.yelpData,
           directions: this.state.directions,
           email: res.email
         }, {
@@ -66,10 +67,12 @@ class BeerRouteCreate extends React.Component {
           .catch((error) => {
             console.log(error);
           }).finally(() => {
-            // this.setState({ submit: false });
+            //this.setState({ submit: false });
           });
       });
     }
+
+    this.setState({ submit: false });
   }
 
   handleBarChange = (event) => {
@@ -91,13 +94,13 @@ class BeerRouteCreate extends React.Component {
       return bar;
     });
 
-    this.setState({ yelpData: barsToUpdate });
+    this.setState({ yelpData: barsToUpdate, submit: false });
   }
 
   componentDidUpdate(prevProps, prevState) {
 
     // Only display welcome message on page load, if search field is empty, or 2 or less bars.
-    if (prevState.baseLocation !== this.state.baseLocation && this.state.baseLocation === '') { this.setState({ welcomeMessage: true }); }
+    if (prevState.baseLocation !== this.state.baseLocation && this.state.baseLocation === '') { this.setState({ welcomeMessage: true, submit: false, noDirections: false }); }
 
     // Exit if there isn't a change with Yelp data.
     if (prevState.yelpData === this.state.yelpData) return;
@@ -109,15 +112,23 @@ class BeerRouteCreate extends React.Component {
     if (!directionQuery) return;
 
     // Replace welcome message with loader
-    if (prevState.directions === this.state.directions) this.setState({ welcomeMessage: false });
+    if (prevState.directions === this.state.directions) this.setState({ welcomeMessage: false, noDirections: false });
 
-    axios.get(`https://brew-crew-backend.onrender.com/bingDirections/${directionQuery} `)
+    axios.get(`http://localhost:3001/bingDirections/${directionQuery} `)
       .then(response => this.setState({ directions: response.data }))
-      .catch(error => console.error(error));
+      .catch(error => console.error(error))
+      .finally(() => {
+
+        !this.state.directions.length ? this.setState({ noDirections: true }) : this.setState({ noDirections: false })
+      }
+      );
+  }
+
+  componentDidMount = () => {
+    this.setState({ submit: false });
   }
 
   render() {
-    console.log(this.state)
     // Yelp results.  Display placeholders if there is no data.
     const yelpList = (this.state.yelpData.length < 1) ? new Array(10).fill('').map((emptyResult, idx) => (<li className='default' key={ idx + emptyResult }>
       <div>-</div>
@@ -168,8 +179,8 @@ class BeerRouteCreate extends React.Component {
                 <RouteDirections directions={ this.state.directions } yelpData={ this.state.yelpData } />
                 {
                   this.props.auth0.isAuthenticated ?
-                    <button className={ this.state.submit ? 'submit' : '' } key={ this.state.directions.length + 1 } onClick={ this.handleRouteSave }><FaRegSave />
-                      Save Route
+                    <button className={ this.state.submit ? 'submit' : '' } key={ this.state.directions.length + 1 } onClick={ this.handleRouteSave } disabled={ this.state.submit ? true : false }><FaRegSave />
+                      { this.state.submit ? 'Route has been saved' : 'Save Route' }
                     </button>
                     :
                     <LoginButton value='Log in to save route' />
@@ -178,7 +189,7 @@ class BeerRouteCreate extends React.Component {
             </> :
             <div id='noResults' className={ this.state.welcomeMessage ? '' : 'loading' }>
               { this.state.welcomeMessage ? <div id='homeMessage'>
-                <h1>< IoMdBeer />Brew Crew</h1>
+                <h1>< IoMdBeer />Brew Cruise</h1>
                 <p>
                   Welcome to our site.  This site was created to help create the most efficient biking (or walking) route between selected bars.
                 </p>
@@ -197,7 +208,7 @@ class BeerRouteCreate extends React.Component {
                 <img id='demoImg' src={ demoGif } alt='demo' />
 
               </div> :
-                <div>
+                (this.state.noDirections) ? 'This route is not recommended for biking.' : <div>
                   <div className='loader'>
                     <GiCartwheel />
                   </div>

@@ -12,7 +12,7 @@ class Nav extends React.Component {
       <>
         <header>
           <nav>
-            <NavLink to="/"><IoMdBeer/> Brew Crew</NavLink>
+            <NavLink to="/"><IoMdBeer /> Brew Cruise</NavLink>
             <div>
               <NavLink to="about">About</NavLink>
               { this.props.auth0.isAuthenticated ? (
