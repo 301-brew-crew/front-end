@@ -27,7 +27,7 @@ class SavedBars extends React.Component {
           'Authorization': `Bearer ${jwt}`
         }
 
-        axios.get(`http://localhost:3001/dbResults?email=${res.email}`, {
+        axios.get(`https://brew-crew-backend.onrender.com/dbResults?email=${res.email}`, {
           headers: headers
         })
           .then(res => {
@@ -56,7 +56,7 @@ class SavedBars extends React.Component {
           'Authorization': `Bearer ${jwt}`
         }
 
-        axios.delete(`http://localhost:3001/dbResults/${id}`, {}, {
+        axios.delete(`https://brew-crew-backend.onrender.com/dbResults/${id}`, {}, {
           headers: headers
         })
           .then(res => {

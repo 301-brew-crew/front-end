@@ -16,6 +16,7 @@ class BeerRouteCreate extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
+      submit: false,
       welcomeMessage: true,
       baseLocation: '',
       yelpData: [],
@@ -24,14 +25,14 @@ class BeerRouteCreate extends React.Component {
   }
 
   getYelpData = () => {
-    axios.get(`http://localhost:3001/yelp/${this.state.baseLocation} `)
+    axios.get(`https://brew-crew-backend.onrender.com/yelp/${this.state.baseLocation} `)
       .then(response => { this.setState({ yelpData: response.data }) })
       .catch(error => console.error(error));
   }
 
   handleYelpSearchSubmit = (event) => {
     event.preventDefault();
-    this.setState({ yelpData: [], directions: [] })
+    this.setState({ yelpData: [], directions: [] });
     this.state.baseLocation && this.getYelpData();
   }
 
@@ -40,6 +41,7 @@ class BeerRouteCreate extends React.Component {
   }
 
   handleRouteSave = (event) => {
+
     // Token
     if (this.props.auth0.isAuthenticated) {
 
@@ -51,20 +53,21 @@ class BeerRouteCreate extends React.Component {
           'Authorization': `Bearer ${jwt}`
         }
 
-        axios.post('http://localhost:3001/dbResults', {
+        axios.post('https://brew-crew-backend.onrender.com/dbResults', {
           yelpData: this.state.directions,
           directions: this.state.directions,
           email: res.email
         }, {
           headers: headers
         })
-          .then(function (response) {
-            console.log(response);
+          .then((response) => {
+            this.setState({ submit: true });
           })
-          .catch(function (error) {
+          .catch((error) => {
             console.log(error);
+          }).finally(() => {
+            // this.setState({ submit: false });
           });
-
       });
     }
   }
@@ -108,12 +111,13 @@ class BeerRouteCreate extends React.Component {
     // Replace welcome message with loader
     if (prevState.directions === this.state.directions) this.setState({ welcomeMessage: false });
 
-    axios.get(`http://localhost:3001/bingDirections/${directionQuery} `)
+    axios.get(`https://brew-crew-backend.onrender.com/bingDirections/${directionQuery} `)
       .then(response => this.setState({ directions: response.data }))
       .catch(error => console.error(error));
   }
 
   render() {
+    console.log(this.state)
     // Yelp results.  Display placeholders if there is no data.
     const yelpList = (this.state.yelpData.length < 1) ? new Array(10).fill('').map((emptyResult, idx) => (<li className='default' key={ idx + emptyResult }>
       <div>-</div>
@@ -164,7 +168,7 @@ class BeerRouteCreate extends React.Component {
                 <RouteDirections directions={ this.state.directions } yelpData={ this.state.yelpData } />
                 {
                   this.props.auth0.isAuthenticated ?
-                    <button key={ this.state.directions.length + 1 } onClick={ this.handleRouteSave }><FaRegSave /> 
+                    <button className={ this.state.submit ? 'submit' : '' } key={ this.state.directions.length + 1 } onClick={ this.handleRouteSave }><FaRegSave />
                       Save Route
                     </button>
                     :
