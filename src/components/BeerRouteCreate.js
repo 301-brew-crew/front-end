@@ -26,7 +26,7 @@ class BeerRouteCreate extends React.Component {
   }
 
   getYelpData = () => {
-    axios.get(`http://localhost:3001/yelp/${this.state.baseLocation} `)
+    axios.get(`https://brew-crew-backend.onrender.com/yelp/${this.state.baseLocation} `)
       .then(response => { this.setState({ yelpData: response.data }) })
       .catch(error => console.error(error));
   }
@@ -54,7 +54,7 @@ class BeerRouteCreate extends React.Component {
           'Authorization': `Bearer ${jwt}`
         }
 
-        axios.post('http://localhost:3001/dbResults', {
+        axios.post('https://brew-crew-backend.onrender.com/dbResults', {
           yelpData: this.state.yelpData,
           directions: this.state.directions,
           email: res.email
@@ -114,7 +114,7 @@ class BeerRouteCreate extends React.Component {
     // Replace welcome message with loader
     if (prevState.directions === this.state.directions) this.setState({ welcomeMessage: false, noDirections: false });
 
-    axios.get(`http://localhost:3001/bingDirections/${directionQuery} `)
+    axios.get(`https://brew-crew-backend.onrender.com/bingDirections/${directionQuery} `)
       .then(response => this.setState({ directions: response.data }))
       .catch(error => console.error(error))
       .finally(() => {

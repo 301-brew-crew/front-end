@@ -29,7 +29,7 @@ class SavedBars extends React.Component {
           'Authorization': `Bearer ${res.jwt}`
         }
 
-        axios.get(`http://localhost:3001/dbResults?email=${res.email}`, {
+        axios.get(`https://brew-crew-backend.onrender.com/dbResults?email=${res.email}`, {
           headers: headers
         })
           .then(res => {
@@ -58,7 +58,7 @@ class SavedBars extends React.Component {
           'Authorization': `Bearer ${res.jwt}`
         }
 
-        axios.delete(`http://localhost:3001/dbResults/${id}`, {}, {
+        axios.delete(`https://brew-crew-backend.onrender.com/dbResults/${id}`, {}, {
           headers: headers
         })
           .then(res => {
@@ -109,7 +109,7 @@ class SavedBars extends React.Component {
             </div>
 
             <div>
-              <div><b>{ route.directions[0].startName }</b> <ImArrowRight/> <b>{ route.directions[route.directions.length - 1].endName }</b></div>
+              <div><b>{ route.directions[0].startName }</b> <ImArrowRight /> <b>{ route.directions[route.directions.length - 1].endName }</b></div>
             </div>
 
           </div>

@@ -21,9 +21,6 @@
 
 #savedBarsContainer #savedResultsList ul {
   list-style: none;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 33px;
 }
 
 #savedBarsContainer #savedResultsList li {
@@ -34,6 +31,10 @@
   background-color: #fff;
   border: 1px solid #000;
   border-radius: 5px;
+}
+
+#savedBarsContainer #savedResultsList li:last-of-type {
+  margin-bottom: 0px;
 }
 
 #savedBarsContainer li > div {
@@ -85,7 +86,8 @@
   filter: initial;
 }
 
-#savedResultsList li:hover .barImgResultContainer, #savedResultsList li:hover .barButtonResultContainer  {
+#savedResultsList li:hover .barImgResultContainer,
+#savedResultsList li:hover .barButtonResultContainer {
   display: flex;
 }
 
@@ -145,7 +147,6 @@
     position: sticky;
     top: 33px;
     border-top: 1px solid;
-    border-bottom: 1px solid;
     border-radius: 5px;
   }
 
@@ -157,11 +158,6 @@
     border-bottom: 1px solid #000;
     display: block;
     text-align: center;
-  }
-
-  #savedBarsContainer #savedResultsList li:last-of-type {
-    margin-bottom: 0px;
-    border-bottom: none;
   }
 
   #savedBarsContainer #savedResultsList li:first-of-type {
