@@ -35,7 +35,7 @@ class App extends React.Component {
   render() {
     return <>
       <RouterProvider router={ router } />
-      <footer> &copy; copyright { new Date().getFullYear() } Brew Cruise</footer>
+      <footer> &copy; copyright { new Date().getFullYear() } Trails of Ales</footer>
     </>
   }
 }

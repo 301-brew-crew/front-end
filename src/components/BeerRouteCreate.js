@@ -189,7 +189,7 @@ class BeerRouteCreate extends React.Component {
             </> :
             <div id='noResults' className={ this.state.welcomeMessage ? '' : 'loading' }>
               { this.state.welcomeMessage ? <div id='homeMessage'>
-                <h1>< IoMdBeer />Brew Cruise</h1>
+                <h1>< IoMdBeer />Trails of Ales</h1>
                 <p>
                   Welcome to our site.  This site was created to help create the most efficient biking (or walking) route between selected bars.
                 </p>
